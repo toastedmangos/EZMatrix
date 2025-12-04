@@ -1,53 +1,51 @@
-EZMatrix Library for MAX7219 8x8 LED Matrix
+It’s mostly correct, but there are a few formatting and structure issues that need fixing for proper Markdown rendering on GitHub:
 
-EZMatrix is an Arduino library for controlling single 8x8 MAX7219 LED matrices, offering smooth text scrolling, animations, confetti and firework effects, and custom 8×8 image drawing.
+1. **Table of commands** – right now it’s just text. You should wrap it in a proper Markdown table with `|` and `---`.
+2. **Headings** – `EZMatrix Commands` and `Custom 8x8 Images` should have `##` or `###`.
+3. **Code blocks** – `byte heart[8][8]` and the example sketch need proper triple backticks `cpp` so they render as code.
+4. **Line breaks** – some lists (like installation steps) should have empty lines between items for clarity.
 
-It’s designed to be simple, with intuitive functions for both letters/numbers and pixel-level control.
+Here’s a corrected, fully GitHub-ready version of your README:
 
-Table of Contents
+```markdown
+# EZMatrix Library for MAX7219 8x8 LED Matrix
 
-Installation
+EZMatrix is an Arduino library for controlling **single 8x8 MAX7219 LED matrices**, offering smooth text scrolling, animations, confetti and firework effects, and custom 8×8 image drawing.
 
-Setup
+It’s designed to be **simple**, with intuitive functions for both letters/numbers and pixel-level control.
 
-EZMatrix Commands
+---
 
-begin()
+## Table of Contents
 
-setBrightness()
+1. [Installation](#installation)  
+2. [Setup](#setup)  
+3. [EZMatrix Commands](#ezmatrix-commands)  
+4. [Custom Images](#custom-images)  
+5. [Example Sketch](#example-sketch)  
+6. [8×8 Coordinate Diagram](#8x8-coordinate-diagram)  
 
-clear()
+---
 
-draw()
+## Installation
 
-scrollText()
+1. Copy the `EZMatrix.h` and `EZMatrix.cpp` files into a folder named `EZMatrix` in your Arduino libraries folder:
 
-print()
-
-animate()
-
-confetti()
-
-firework()
-
-Custom Images
-
-Example Usage
-
-Installation
-
-Copy the EZMatrix.h and EZMatrix.cpp files into your Arduino libraries folder:
+```
 
 Documents/Arduino/libraries/EZMatrix/
 
+````
 
-Make sure you also have the LedControl library
- installed.
+2. Install the [LedControl library](https://github.com/wayoda/LedControl), either via the Library Manager in Arduino IDE or manually.
 
-Setup
+---
+
+## Setup
 
 Include the library and create objects for LedControl and EZMatrix:
 
+```cpp
 #include <LedControl.h>
 #include "EZMatrix.h"
 
@@ -56,116 +54,33 @@ LedControl lc(12, 11, 10, 1);
 EZMatrix ez(lc);
 
 void setup() {
-  ez.begin(8); // Initialize with brightness (0-15)
+  ez.begin(8); // Initialize with brightness 0-15
 }
+````
 
-EZMatrix Commands
-1. begin(uint8_t intensity)
+---
 
-Initializes the matrix and sets brightness.
+## EZMatrix Commands
 
-intensity: 0 (dim) to 15 (bright).
+| Command                                                          | Description                                 | Example                            |
+| ---------------------------------------------------------------- | ------------------------------------------- | ---------------------------------- |
+| `begin(intensity)`                                               | Initialize the display with brightness 0-15 | `ez.begin(8);`                     |
+| `setBrightness(intensity)`                                       | Change brightness on the fly                | `ez.setBrightness(5);`             |
+| `clear()`                                                        | Clear the display                           | `ez.clear();`                      |
+| `draw(byte grid[8][8])`                                          | Draw a custom 8×8 image                     | `ez.draw(smiley);`                 |
+| `scrollText(text, speed)`                                        | Scroll text pixel-by-pixel                  | `ez.scrollText("HELLO",100);`      |
+| `print(text, letterDelay, endDelay)`                             | Show letters one-by-one, centered           | `ez.print("HI",400,1000);`         |
+| `animate(frames[], count, frameDelay, restartDelay, finalPause)` | Play frames once                            | `ez.animate(anim,2,200,500,1000);` |
+| `confetti(durationMs, speed)`                                    | Random confetti dots                        | `ez.confetti(2000,100);`           |
+| `firework(durationMs, speed, spread)`                            | Expanding bursts                            | `ez.firework(3000,70,3);`          |
 
-ez.begin(10);
+---
 
-2. setBrightness(uint8_t intensity)
+## Custom 8x8 Images
 
-Adjusts brightness on the fly without reinitializing.
+Design images using `0 = off`, `1 = on`:
 
-ez.setBrightness(5);
-
-3. clear()
-
-Clears the display immediately.
-
-ez.clear();
-
-4. draw(byte grid[8][8])
-
-Draws a custom 8×8 image. Each element is 0 (off) or 1 (on).
-
-The array is indexed as [row][col] with (0,0) top-left.
-
-Rotation is fixed to 6 o’clock orientation.
-
-byte smiley[8][8] = {
-  {0,0,0,0,0,0,0,0},
-  {0,1,0,0,0,0,1,0},
-  {0,1,0,0,0,0,1,0},
-  {0,0,0,0,0,0,0,0},
-  {0,0,1,0,0,1,0,0},
-  {0,0,0,1,1,0,0,0},
-  {0,0,0,0,0,0,0,0},
-  {0,0,0,0,0,0,0,0}
-};
-
-ez.draw(smiley);
-
-5. scrollText(const char* text, uint16_t speed)
-
-Scrolls text pixel by pixel from right to left.
-
-text: letters and numbers (A-Z, 0-9). Symbols like [heart] are optional.
-
-speed: delay in milliseconds between frames (smaller = faster).
-
-ez.scrollText("HELLO 123", 100);
-
-6. print(const char* text, uint16_t letterDelay, uint16_t endDelay)
-
-Prints letters one by one, centered on the 8x8 matrix.
-
-letterDelay: time each letter is displayed (ms)
-
-endDelay: pause after entire message
-
-ez.print("HI", 400, 1000);
-
-7. animate(byte* frames[], uint8_t frameCount, uint16_t frameDelay, uint16_t restartDelay, uint16_t finalPause)
-
-Plays a series of 8x8 frames once.
-
-frames: array of 8×8 byte arrays
-
-frameCount: number of frames
-
-frameDelay: delay between frames (ms)
-
-restartDelay: pause before restarting (ms)
-
-finalPause: pause after animation finishes (ms)
-
-byte frame1[8][8] = { /* ... */ };
-byte frame2[8][8] = { /* ... */ };
-byte* anim[] = { (byte*)frame1, (byte*)frame2 };
-ez.animate(anim, 2, 200, 500, 1000);
-
-8. confetti(unsigned long durationMs, uint16_t speed)
-
-Displays random blinking dots like confetti.
-
-durationMs: total duration in milliseconds
-
-speed: frame delay (ms)
-
-ez.confetti(2000, 100); // 2 seconds of confetti
-
-9. firework(unsigned long durationMs, uint16_t speed, uint8_t spread)
-
-Creates expanding burst effects at random locations.
-
-durationMs: total duration (ms)
-
-speed: delay between burst frames (ms)
-
-spread: radius of explosion (1–6)
-
-ez.firework(3000, 70, 3); // 3 seconds, moderate spread
-
-Custom Images
-
-You can create your own 8×8 bitmaps using 0 for off and 1 for on:
-
+```cpp
 byte heart[8][8] = {
   {0,1,0,0,0,0,1,0},
   {1,1,1,0,0,1,1,1},
@@ -178,8 +93,13 @@ byte heart[8][8] = {
 };
 
 ez.draw(heart);
+```
 
-Example Sketch
+---
+
+## Example Sketch
+
+```cpp
 #include <LedControl.h>
 #include "EZMatrix.h"
 
@@ -202,12 +122,25 @@ void setup() {
 }
 
 void loop() {
-  ez.draw(smile);            // custom image
-  delay(1000);
-
-  ez.confetti(2000, 100);    // confetti effect
-  ez.scrollText("HELLO 123", 120); // smooth scrolling
-  ez.firework(3000, 70, 3);  // fireworks
-  ez.print("DONE", 400, 1000); // print letters one by one
+  ez.confetti(2000, 100);
+  ez.scrollText("HAPPY BIRTHDAY", 120);
+  ez.firework(3000, 70, 3);
+  ez.print("DONE", 400, 1000);
   delay(2000);
 }
+```
+
+---
+
+## 8×8 Coordinate Diagram (not very important just for the geeks)
+
+```
+[0,0] [0,1] [0,2] [0,3] [0,4] [0,5] [0,6] [0,7]
+[1,0] [1,1] [1,2] [1,3] [1,4] [1,5] [1,6] [1,7]
+[2,0] [2,1] [2,2] [2,3] [2,4] [2,5] [2,6] [2,7]
+[3,0] [3,1] [3,2] [3,3] [3,4] [3,5] [3,6] [3,7]
+[4,0] [4,1] [4,2] [4,3] [4,4] [4,5] [4,6] [4,7]
+[5,0] [5,1] [5,2] [5,3] [5,4] [5,5] [5,6] [5,7]
+[6,0] [6,1] [6,2] [6,3] [6,4] [6,5] [6,6] [6,7]
+[7,0] [7,1] [7,2] [7,3] [7,4] [7,5] [7,6] [7,7]
+```

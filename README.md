@@ -76,7 +76,9 @@ void setup() {
 
 ---
 
-## Custom 8x8 Images
+## Custom 8x8 Images 
+
+If you want a really easy way to craate these patterns by just clicking, visit my other repo with a website in it to make this a million times easier: https://github.com/toastedmangos/EZMatrix-drawer
 
 Design images using `0 = off`, `1 = on`:
 

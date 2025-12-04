@@ -1,11 +1,3 @@
-It’s mostly correct, but there are a few formatting and structure issues that need fixing for proper Markdown rendering on GitHub:
-
-1. **Table of commands** – right now it’s just text. You should wrap it in a proper Markdown table with `|` and `---`.
-2. **Headings** – `EZMatrix Commands` and `Custom 8x8 Images` should have `##` or `###`.
-3. **Code blocks** – `byte heart[8][8]` and the example sketch need proper triple backticks `cpp` so they render as code.
-4. **Line breaks** – some lists (like installation steps) should have empty lines between items for clarity.
-
-Here’s a corrected, fully GitHub-ready version of your README:
 
 ```markdown
 # EZMatrix Library for MAX7219 8x8 LED Matrix

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>8x8 Matrix Drawer</title>
+
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#ffffff" />
+
+<style>
+  body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+  #grid { display: grid; grid-template-columns: repeat(8, 30px); grid-gap: 4px; margin-bottom: 20px; }
+  .cell { width: 30px; height: 30px; background: #ddd; border-radius: 4px; cursor: pointer; }
+  .on { background: #222; }
+  textarea { width: 300px; height: 160px; }
+  #matrixCount { width: 60px; }
+</style>
+</head>
+<body>
+
+  <h2>8x8 LED Matrix Drawer</h2>
+
+  <label>Number of matrices: <input id="matrixCount" type="number" value="1" min="1" max="8"></label>
+  <button id="applyMatrices">Apply</button>
+
+  <div id="gridsContainer"></div>
+
+  <button id="exportBtn">Export to Arduino Format</button>
+  <h3>Generated Code</h3>
+  <textarea id="output"></textarea>
+
+<script>
+function createGrid(id) {
+  const wrapper = document.createElement('div');
+  wrapper.style.margin = '20px 0';
+  wrapper.innerHTML = `<h4>Matrix ${id+1}</h4>`;
+
+  const grid = document.createElement('div');
+  grid.className = 'grid';
+  grid.style.display = 'grid';
+  grid.style.gridTemplateColumns = 'repeat(8, 30px)';
+  grid.style.gridGap = '4px';
+
+  const cells = [];
+
+  for (let r = 0; r < 8; r++) {
+    cells[r] = [];
+    for (let c = 0; c < 8; c++) {
+      const cell = document.createElement('div');
+      cell.className = 'cell';
+      cell.dataset.row = r;
+      cell.dataset.col = c;
+
+      cell.addEventListener('click', () => {
+        cell.classList.toggle('on');
+      });
+
+      grid.appendChild(cell);
+      cells[r][c] = cell;
+    }
+  }
+
+  wrapper.appendChild(grid);
+  return { wrapper, cells };
+}
+
+let grids = [];
+const container = document.getElementById('gridsContainer');
+
+function rebuild() {
+  const count = parseInt(document.getElementById('matrixCount').value);
+  container.innerHTML = '';
+  grids = [];
+  for (let i = 0; i < count; i++) {
+    const g = createGrid(i);
+    grids.push(g);
+    container.appendChild(g.wrapper);
+  }
+}
+
+document.getElementById('applyMatrices').addEventListener('click', rebuild);
+rebuild();
+
+document.getElementById('exportBtn').addEventListener('click', () => {
+  let code = '';
+  grids.forEach((g, idx) => {
+    code += `byte pattern_${idx+1}[8][8] = {\n`;
+    for (let r = 0; r < 8; r++) {
+      code += '  { ';
+      for (let c = 0; c < 8; c++) {
+        const on = g.cells[r][c].classList.contains('on') ? 1 : 0;
+        code += on + (c < 7 ? ', ' : '');
+      }
+      code += ` }${r < 7 ? ',' : ''}\n`;
+    }
+    code += `};\n\n`;
+  });
+  document.getElementById('output').value = code;
+});
+
+// Register service worker for PWA
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js");
+}
+</script>
+
+</body>
+</html>

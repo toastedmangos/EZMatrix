@@ -6,6 +6,7 @@ EZMatrix is an Arduino library for controlling **single 8x8 MAX7219 LED matrices
 
 It’s designed to be **simple**, with intuitive functions for both letters/numbers and pixel-level control.
 
+
 ---
 
 ## Table of Contents
@@ -21,7 +22,8 @@ It’s designed to be **simple**, with intuitive functions for both letters/numb
 
 ## Installation
 
-1. Copy the `EZMatrix.h` and `EZMatrix.cpp` files into a folder named `EZMatrix` in your Arduino libraries folder:
+1. Copy the `EZMatrix.h` and `EZMatrix.cpp` and `library.properties` files into a folder named `EZMatrix` in your Arduino libraries folder:
+or download the .cpp, .h and .properties from the RELEASE file. They dont make a difference it dosen't matter which one you choose. 
 
 ```
 
